@@ -1,4 +1,5 @@
 .idea/
 .venv/
 core.py
+*.png
 __pycache__/
