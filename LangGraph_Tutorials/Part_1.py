@@ -1,3 +1,12 @@
+import sys
+import os
+
+# Add the parent directory to sys.path so Python can find core.py
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+# Now you can import core
+import core
+
 from typing import Annotated
 
 from typing_extensions import TypedDict
@@ -15,15 +24,13 @@ class State(TypedDict):
 
 graph_builder = StateGraph(State)
 
-import os
-from langchain.chat_models import init_chat_model
 
 #os.environ["OPENAI_API_KEY"] = "sk-..."
 
-llm = init_chat_model("anthropic:claude-3-5-sonnet-latest")
+#llm = init_chat_model("anthropic:claude-3-5-sonnet-latest")
 
 def chatbot(state: State):
-    return {"messages": [llm.invoke(state["messages"])]}
+    return {"messages": [core.llm.invoke(state["messages"])]}
 
 
 # The first argument is the unique node name
