@@ -1,5 +1,6 @@
 langgraph==0.4.7
 langsmith==0.3.43
 langchain[google-genai]==0.3.25
+langchain-anthropic
 # Add others if needed, like:
 #langchain[openai]==0.3.18
