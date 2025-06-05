@@ -2,7 +2,14 @@ import os
 import sqlite3
 from typing import Annotated, TypedDict, List, Dict
 
-from langchain.schema import HumanMessage
+try:
+    from langchain.schema import HumanMessage
+except Exception:  # pragma: no cover - optional dependency
+    class HumanMessage:
+        """Fallback HumanMessage with just a content attribute."""
+
+        def __init__(self, content: str):
+            self.content = content
 
 from langgraph.graph import StateGraph
 from langgraph.graph.message import add_messages

@@ -3,7 +3,12 @@ import sys
 import types
 
 import pytest
-from langchain.schema import HumanMessage
+try:
+    from langchain.schema import HumanMessage
+except Exception:  # pragma: no cover - optional dependency
+    class HumanMessage:
+        def __init__(self, content: str):
+            self.content = content
 
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
