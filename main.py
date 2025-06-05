@@ -1,5 +1,5 @@
 import core
-from graph.zork_graph import graph, GameState
+from graph.zork_graph import graph, GameState, summarize_room
 from db.init_db import init_db
 
 
@@ -18,7 +18,9 @@ def stream_graph(state: GameState, user_input: str) -> GameState:
 def main() -> None:
     init_db()
     state: GameState = {"messages": [], "current_room": "room1"}
-    state = stream_graph(state, "")  # initial room description
+    first = summarize_room(state)
+    state["messages"] = first["messages"]
+    print("Assistant:", first["messages"][-1]["content"])
     print("(Type 'quit' or 'exit' to quit)")
     while True:
         user_input = input("User: ")
