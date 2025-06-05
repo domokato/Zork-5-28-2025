@@ -2,6 +2,8 @@ import os
 import sqlite3
 from typing import Annotated, TypedDict, List, Dict
 
+from langchain.schema import HumanMessage
+
 from langgraph.graph import StateGraph
 from langgraph.graph.message import add_messages
 
@@ -37,7 +39,15 @@ def summarize_room(state: GameState):
 
 
 def handle_player(state: GameState):
-    content = state["messages"][-1]["content"]
+    messages = state["messages"]
+    content = ""
+    for msg in reversed(messages):
+        if isinstance(msg, HumanMessage):
+            content = msg.content
+            break
+    else:
+        last_msg = messages[-1]
+        content = getattr(last_msg, "content", "")
     lower = content.lower()
     if "detail" in lower:
         desc = get_room_description(state["current_room"])
