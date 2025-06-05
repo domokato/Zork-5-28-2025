@@ -4,6 +4,9 @@ from langgraph.graph import StateGraph, START
 from langgraph.graph.message import add_messages
 from langgraph.prebuilt import ToolNode, InjectedState, tools_condition
 from langchain.tools import tool
+from langgraph.checkpoint.memory import MemorySaver
+from langgraph.types import Command
+import uuid
 
 import core
 
@@ -94,7 +97,7 @@ graph_builder.add_edge("tools", "summarize")
 
 graph_builder.set_entry_point("summarize")
 
-graph = graph_builder.compile()
+graph = graph_builder.compile(checkpointer=MemorySaver())
 
 
 # Simple helper to play the game from a script
@@ -102,9 +105,10 @@ graph = graph_builder.compile()
 def play(start_room: str = "hall"):
     """Simple interactive loop for the adventure game."""
     state = {"current_room": start_room, "messages": []}
+    config = {"configurable": {"thread_id": str(uuid.uuid4())}}
 
     # Summarize the starting room and ask for input
-    state = graph.invoke(state, interrupt_after=["ask"])
+    state = graph.invoke(state, config=config, interrupt_after=["ask"])
     for msg in state["messages"]:
         print(msg.content)
 
@@ -113,10 +117,9 @@ def play(start_room: str = "hall"):
         if user_input.lower() in {"quit", "exit", "q"}:
             print("Goodbye!")
             break
-        # Append player input and process until the next prompt
-        state["messages"].append({"role": "user", "content": user_input})
         prev_len = len(state["messages"])
-        state = graph.invoke(state, interrupt_after=["ask"])
+        command = Command(update={"messages": [{"role": "user", "content": user_input}]})
+        state = graph.invoke(command, config=config, interrupt_after=["ask"])
         for msg in state["messages"][prev_len:]:
             print(msg.content)
 
