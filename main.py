@@ -4,7 +4,10 @@ from db.init_db import init_db
 
 
 def stream_graph(state: GameState, user_input: str) -> GameState:
-    events = graph.stream({"messages": [{"role": "user", "content": user_input}], "current_room": state["current_room"]})
+    events = graph.stream(
+        {"messages": [{"role": "user", "content": user_input}], "current_room": state["current_room"]},
+        {"recursion_limit": 2},
+    )
     new_state = state.copy()
     for event in events:
         if "current_room" in event:
