@@ -75,7 +75,7 @@ graph_builder.add_node("action", handle_player)
 graph_builder.add_edge("describe", "action")
 graph_builder.add_edge("action", "describe")
 
-graph_builder.set_entry_point("describe")
+graph_builder.set_entry_point("action")
 
 graph = graph_builder.compile()
-graph.interrupt_after_nodes = ["action"]
+graph.interrupt_after_nodes = ["describe"]
