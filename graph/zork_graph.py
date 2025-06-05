@@ -78,3 +78,4 @@ graph_builder.add_edge("action", "describe")
 graph_builder.set_entry_point("describe")
 
 graph = graph_builder.compile()
+graph.interrupt_after_nodes = ["action"]
