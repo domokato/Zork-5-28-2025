@@ -5,7 +5,7 @@ import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 # Now you can import core
-import core
+from core import llm
 
 from typing import Annotated
 
@@ -30,7 +30,7 @@ graph_builder = StateGraph(State)
 #llm = init_chat_model("anthropic:claude-3-5-sonnet-latest")
 
 def chatbot(state: State):
-    return {"messages": [core.llm.invoke(state["messages"])]}
+    return {"messages": [llm.invoke(state["messages"])]}
 
 
 # The first argument is the unique node name
