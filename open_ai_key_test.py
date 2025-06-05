@@ -1,3 +1,6 @@
+import pytest
+pytest.skip("manual test", allow_module_level=True)
+
 import os
 from openai import OpenAI
 from openai import APIError, RateLimitError, AuthenticationError, OpenAIError
