@@ -121,7 +121,8 @@ def play(start_room: str = "hall"):
         command = Command(update={"messages": [{"role": "user", "content": user_input}]})
         state = graph.invoke(command, config=config, interrupt_after=["ask"])
         for msg in state["messages"][prev_len:]:
-            print(msg.content)
+            if msg.get("role") != "user":
+                print(msg.content)
 
 
 if __name__ == "__main__":
