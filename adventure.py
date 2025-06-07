@@ -95,6 +95,8 @@ def move_room(
 
     new_room = exits[norm_direction]
     state["current_room"] = new_room
+    # Clear previous conversation so the LLM doesn't see old messages
+    state["messages"].clear()
     # Inform the LLM of success without directly narrating
     msg = ToolMessage(
         "MOVED",
